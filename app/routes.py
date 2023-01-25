@@ -4,7 +4,7 @@ from app import app
 from flask import render_template, request, redirect, url_for
 from.forms import signupform, loginform, pokemonform, postform
 import requests
-from .models import User
+from .models import User, Post
 from flask_login import login_user, logout_user, current_user
 import requests as r
 
@@ -14,7 +14,7 @@ def homePage():
     return render_template('index.html')
 
 
-@app.route('/pokemon', methods=["POST"])    
+@app.route('/pokemon', methods=["GET","POST"])    
 def pokemon():
     form = pokemonform()
     if request.method == 'POST':
@@ -27,21 +27,23 @@ def pokemon():
             data = response.json()
 
             names = data['forms'][0]['name']
-            drivers = data['abilities'][0]['ability']
+            drivers = data['abilities'][0]['ability']['name']
             experience = data['base_experience']
             sprites = data['sprites']['front_shiny']
             hp_stats = data['stats'][0]['base_stat']
             attack_stats = data['stats'][1]['base_stat']
             defense_stats = data['stats'][2]['base_stat']
+            moves = data['moves'][0]['move']['name']
 
             pokemon = {
                 'name': names,
                 'driver': drivers,
-                'experince': experience,
+                'experience': experience,
                 'sprite': sprites,
                 'hp_stat': hp_stats,
                 'attack_stat': attack_stats,
-                'defense_stat': defense_stats
+                'defense_stat': defense_stats,
+                'move': moves
             }
             return render_template('pokemon.html', form = form, pokemon = pokemon)
 
@@ -100,9 +102,6 @@ def login():
                 print('Username does not exist.')
 
     return render_template('login.html', form = form)
-
-
-
 
 
 

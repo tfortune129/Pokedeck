@@ -1,35 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}    
-    
-    <h1><b>Pokémon Dictionary</b></h1>
+  <div class="col d-flex justify-content-center">
+
+    <h1><b><small>Pokémon Dictionary</small></b></h1>
+  </div>
     <!-- to use variables, two curly braces: -->
     <!-- {{ artists }} -->
 
 
     <!-- to write for loops, use one curly brace with parenthesis -->
     <form method="POST" class="container col-4">
+        
         {{ form.hidden_tag() }}
         
-        {{ form.pokemon(class='form-control', placeholder='Input Pokémon Here') }}
+        {{ form.pokemon(class='form-control', placeholder='Input Pokémon Here') }} 
+      
+      
         {{ form.submit(class='btn btn-primary') }}
+        
 
     </form>
 
 
 
     {% if pokemon %}
-
-    <div class="card" style="width: 18rem;">
+    <div class="col d-flex justify-content-center">
+    
+    <div class="card h-50" style="width: 16rem;">
         <img src="{{ pokemon.sprite }}" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">{{ pokemon.name.title() }}</h5>
-          <p1 class="card-text">{{ pokemon.driver }}</p1>
-          <p2 class="card-text">{{ pokemon.experience }}</p2>
+          <h2 class="card-title">{{ pokemon.name.title() }}</h2>
+          <p class="card-text">PokéAbility: {{ pokemon.driver.title() }}</p>
+          <p class="card-text">Featured Move: {{ pokemon.move.title() }}</p>
+          <p class="card-text">HP Base Stat: {{ pokemon.hp_stat }}</p>
+          <p class="card-text">Attack Base Stat: {{ pokemon.attack_stat }}</p>
+          <p class="card-text">Defense Base Stat: {{ pokemon.defense_stat }}</p>
+            <div class="col d-flex justify-content-center">
           <a href="#" class="btn btn-primary">CATCH!</a>
+            </div>
         </div>
-      </div>
+    </div>
+  </div>
 
     {% endif %}
+
 {% endblock %}
 
 
