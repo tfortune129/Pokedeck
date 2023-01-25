@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "PokeAPI_FLASK",
+            "connectString": "postgres://lwwwqqzo:m3iqjn6zQTISKoQVKiH-2AOTAtjfIkNQ@chunee.db.elephantsql.com/lwwwqqzo"
+        }
+    ]
+}
