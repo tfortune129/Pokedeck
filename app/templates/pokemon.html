@@ -2,7 +2,7 @@
 {% block content %}    
   <div class="col d-flex justify-content-center">
 
-    <h1><b><small>Pokémon Dictionary</small></b></h1>
+    <h1><b><small>Pokémon Search</small></b></h1>
   </div>
     <!-- to use variables, two curly braces: -->
     <!-- {{ artists }} -->
@@ -30,14 +30,19 @@
         <img src="{{ pokemon.sprite }}" class="card-img-top" alt="...">
         <div class="card-body">
           <h2 class="card-title">{{ pokemon.name.title() }}</h2>
-          <p class="card-text">PokéAbility: {{ pokemon.driver.title() }}</p>
+          <p class="card-text">PokéAbility: {{ pokemon.ability.title() }}</p>
           <p class="card-text">Featured Move: {{ pokemon.move.title() }}</p>
           <p class="card-text">HP Base Stat: {{ pokemon.hp_stat }}</p>
           <p class="card-text">Attack Base Stat: {{ pokemon.attack_stat }}</p>
           <p class="card-text">Defense Base Stat: {{ pokemon.defense_stat }}</p>
+            
             <div class="col d-flex justify-content-center">
-          <a href="#" class="btn btn-primary">CATCH!</a>
+          
+              <a href="{{ url_for('pokecatch', pokemonName=pokemon.name) }}" class="btn btn-primary">CATCH!</a>
+            
             </div>
+
+
         </div>
     </div>
   </div>

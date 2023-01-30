@@ -1,9 +1,6 @@
-
-
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="#">PokéBattle</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -17,7 +14,7 @@
 
 
           <li class="nav-item">
-            <a class="nav-link" href="/pokemon">Pokemon</a>
+            <a class="nav-link" href="/pokemon">Pokémon Search</a>
           </li>
           
           {% if current_user.is_authenticated %}
@@ -46,7 +43,10 @@
           </li>
 
           {% endif %}
-
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/mypokemon">My Pokémon</a>
+          </li>
 
         </ul>
       </div>
