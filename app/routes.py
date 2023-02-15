@@ -178,10 +178,28 @@ def logout():
 @app.route('/mypokemon', methods=['GET'])
 @login_required
 def mypokemon():
-    my_pokemon = Catch.query.filter_by(user_id=current_user.id).all()
-    return render_template('catch.html', my_pokemon=my_pokemon)
+    my_pokemon = Pokemon.query.join(Catch).filter(Catch.user_id==current_user.id).all()
+    return render_template('catch.html', catch=my_pokemon)
 
 
+
+@app.route('/release/<int:pokemon_id>', methods=['GET', 'POST'])
+@login_required
+def pokerelease(pokemon_id):
+    pokemon = Pokemon.query.filter_by(user_id=current_user.id, pokemon_id=pokemon_id).first()
+    if pokemon:
+        pokemon.deleteFromDB()
+        flash(f"{pokemon.name.title()} has been removed from your collection.", 'success')
+
+    else:
+        flash("You don't have that Pokémon in your collection.", 'warning')
+
+    return redirect(url_for('mypokemon'))
+    
+    
+    
+    
+    pokemon = Pokemon.query.filter_by(id=pokemon_id).filter_by(user_id=current_user.id).first()
 
 
 

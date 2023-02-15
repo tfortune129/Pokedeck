@@ -45,6 +45,7 @@ class Pokemon(db.Model):
     defense_stat = db.Column(db.Integer)
     move = db.Column(db.String)
     caught = False
+    catch = db.relationship('Catch', backref='catch', lazy=True)
 
 
     def __init__(self, name, ability, sprite, hp_stat, attack_stat, defense_stat, move):
@@ -68,6 +69,7 @@ class Pokemon(db.Model):
 
 
 class Catch(db.Model):
+    __tablename__ = 'catch'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     pokemon_id = db.Column(db.Integer, db.ForeignKey('pokemon.id'), nullable=False)
