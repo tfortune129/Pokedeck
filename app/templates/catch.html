@@ -1,11 +1,52 @@
 {% extends 'base.html' %}
+
+{% block content %}
+  <h1>My Pokémon</h1>
+
+  <div class="row">
+    {% for pokemon in my_pokemon %}
+  <div class="card h-50" style="width: 16rem;">
+    <img src="{{ pokemon.sprite }}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h2 class="card-title">{{ pokemon.name.title() }}</h2>
+      <p class="card-text">PokéAbility: {{ pokemon.driver.title() }}</p>
+      <p class="card-text">Featured Move: {{ pokemon.move.title() }}</p>
+      <p class="card-text">HP Base Stat: {{ pokemon.hp_stat }}</p>
+      <p class="card-text">Attack Base Stat: {{ pokemon.attack_stat }}</p>
+      <p class="card-text">Defense Base Stat: {{ pokemon.defense_stat }}</p>
+    </div>
+    {% endfor %}
+      
+      <!-- {% if pokemon.caught %}
+        <a href="{{ url_for('catch', pokemonName=pokemon.name) }}" class="btn btn-primary">CATCH!</a>
+      {% endif %}
+    {% endif %} -->
+  </div>
+<!-- {% endfor %} -->
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- {% extends 'base.html' %}
 {% block content %}
 
   <h1>My Pokémon</h1>
 
-  {% for i in pokemon %}
-  <!-- <div class="col d-flex justify-content-center"> -->
-  
+  <div class="col d-flex justify-content-center">
+  {% for pokemon in catch %}
   <div class="card h-50" style="width: 16rem;">
       <img src="{{ pokemon.sprite }}" class="card-img-top" alt="...">
       <div class="card-body">
@@ -16,9 +57,14 @@
         <p class="card-text">Attack Base Stat: {{ pokemon.attack_stat }}</p>
         <p class="card-text">Defense Base Stat: {{ pokemon.defense_stat }}</p>
       </div>
+
+      {% if current_user.is_aunthenticated %}
+        {% if pokemon.caught %}
+        <a href="{{ url_for('catch', pokemonName=pokemon.name) }}" class="btn btn-primary">CATCH!</a>
+
   </div>
 </div>
 
+ 
   {% endfor %}
-
-{% endblock %}
+{% endblock %} -->

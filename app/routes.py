@@ -1,12 +1,13 @@
 #import app into route file:
 from app import app
 #import for jinja2:
-from flask import render_template, request, redirect, url_for
-from.forms import signupform, loginform, pokemonform, postform
+from flask import render_template, request, redirect, url_for, flash
+from.forms import signupform, loginform, pokemonform, PokeCaught
 import requests
 from .models import User, Catch, Pokemon
 from flask_login import login_user, logout_user, login_required, current_user
 # import requests as r
+
 
 # create definitions of all of our routes through:
 @app.route('/')
@@ -17,15 +18,15 @@ def homePage():
 @app.route('/pokemon', methods=["GET","POST"])    
 def pokemon():
 
-    pokemon = Pokemon.query.all()
-    if current_user.is_authenticated:
-        my_pokemon = Catch.query.filter_by(user_id=current_user.id).all()
-        # pokemon = {pokemon.pokemon_id for pokemon in my_pokemon}
+    # pokemon = Pokemon.query.all()
+    # if current_user.is_authenticated:
+    #     my_pokemon = Catch.query.filter_by(user_id=current_user.id).all()
+    #     # pokemon = {pokemon.pokemon_id for pokemon in my_pokemon}
 
-        for p in my_pokemon:
-            print(p)
-            if p.id in pokemon:
-                p.caught = True
+    #     for p in my_pokemon:
+    #         print(p)
+    #         if p.id in pokemon:
+    #             p.caught = True
 
 
     form = pokemonform()
@@ -55,6 +56,9 @@ def pokemon():
             pokemon=Pokemon(names, abilities, sprites, hp_stats, attack_stats, defense_stats, moves)
 
             pokemon.saveToDB()
+        
+        else:
+            flash('This Pokémon is not available, please try again.', category='warning')
             # pokemon = {
             #     'name': names,
             #     'ability': abilities,
@@ -67,19 +71,46 @@ def pokemon():
             # }
             return render_template('pokemon.html', form = form, pokemon = pokemon)
 
-        # return(f'Pokemon:\nName: {names}, ability: {drivers}, base-experience: {experience}, sprite: {sprites}, and stats: {hp_stats}, {attack_stats}, {defense_stats}.')
-
     return render_template('pokemon.html', form = form)
 
 
-# @app.route('/my_pokemon', methods=["GET"])
-# def caught():
+
+@app.route('/catch/<int:pokemon_id>', methods=["GET", "POST"])
+@login_required
+def pokecatch(pokemon_id):
+    pokemon = Pokemon.query.get(pokemon_id)
     
-#      if len(my_pokemon) == 5:
-#             print('Stop')
-#     else:
-#         print(my_pokemon)
-# return render_template('my_pokemon.html')
+    if pokemon.caught:
+        flash(f'Sorry, {pokemon.name.title()} has already been caught.', category='warning')
+    elif Catch.query.filter_by(user_id=current_user.id).count() >= 5:
+        flash('Sorry, you can only catch up to 5 Pokemon.', category='warning')
+    else:
+        catch = Catch(user_id=current_user.id, pokemon_id=pokemon.id)
+        catch.saveToDB()
+        pokemon.caught = True
+        pokemon.saveChanges()
+        flash(f'{pokemon.name.title()} has been caught and added to your collection.', category='success')
+    return redirect(url_for('pokemon'))
+
+
+
+
+# @app.route('/catch/<int:pokemonName>', methods=["GET", "POST"])
+# @login_required
+# def pokecatch(pokemonName):
+#         catch = Pokemon.query.filter_by(name = pokemonName)
+#         # query, if, flash, redirect
+#         # if len() caught_pokemon = Pokemon.query.filter_by(user_id = current_user.id)
+#         # if catch and catch.user_id == current_user.id:
+#         if catch.caught == False:
+#             catch.saveToDB()
+#             flash(f'{catch.name.title()} is now ready to fight', category='success')
+#             return redirect(url_for('pokemon'))
+#         else:
+#             flash(f'Unfortunately, {catch.name.title()} is not available :(', category='warning')
+#             return redirect(url_for('pokemon'))
+
+
 
 
 # create form route:
@@ -144,7 +175,51 @@ def logout():
 
 
 
+@app.route('/mypokemon', methods=['GET'])
+@login_required
+def mypokemon():
+    my_pokemon = Catch.query.filter_by(user_id=current_user.id).all()
+    return render_template('catch.html', my_pokemon=my_pokemon)
 
+
+
+
+
+# def pokerelease(pokemon_id):
+#     catch_instance = Catch.query.filter_by(pokemon_id=pokemon_id).filter_by(user_id=current_user.id).first()
+#     catch_instance.deleteFromDB()
+
+#     return redirect(url_for('pokemon'))
+  
+
+
+# @app.route('/mypokemon', methods=["POST"])
+# @login_required
+# def caught():
+#     pokecatch = Pokemon.query.all()
+#     if current_user.is_authenticated:
+#         my_pokemon = Catch.query.filter_by(user_id=current_user.id).all()
+
+#         for pokemon in my_pokemon:
+#             if pokemon.id in pokemon:
+#                 pokemon.caught = True
+#     return render_template('mypokemon.html', pokecatch = pokecatch)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# JUNK:
 
 # @app.route('/posts/create', methods=["GET", "POST"])
 # def createPost():
@@ -161,40 +236,6 @@ def logout():
 
 
 #     return render_template('createpost.html', form = form)
-
-
-
-
-@app.route('/mypokemon/<string:pokemonName>/catch', methods=["GET"])
-@login_required
-def pokecatch(pokemonName):
-    pokemon=Pokemon.query.filter(Pokemon.name==pokemonName).first()
-    catch_instance = Catch(current_user.id, pokemon.id)
-    catch_instance.saveToDB()
-    
-
-    return redirect(url_for('pokemon'))
-    
-    # p = (self, name, ability, sprite, hp_stats, attack_stats, defense_stats, moves):
-    # return render_template('catch.html')
-    # limit to 5 pokemon   
-
-@app.route('/mypokemon/<int:pokemon_id>/release', methods=["GET"])
-@login_required
-def pokerelease(pokemon_id):
-    catch_instance = Catch.query.filter_by(pokemon_id=pokemon_id).filter_by(user_id=current_user.id).first()
-    catch_instance.deleteFromDB()
-
-    return redirect(url_for('pokemon'))
-  
-
-
-
-
-
-
-
-
 
 
 

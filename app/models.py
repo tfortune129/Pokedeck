@@ -25,6 +25,16 @@ class User(db.Model, UserMixin):
         db.session.add(self)
         db.session.commit()
 
+    def to_dict(self):
+        return{
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'apitoken': self.apitoken
+            
+
+        }
+
 class Pokemon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -51,6 +61,8 @@ class Pokemon(db.Model):
         db.session.commit()
     def deleteFromDB(self):
         db.session.delete(self)
+        db.session.commit()
+    def saveChanges(self):
         db.session.commit()
 
 

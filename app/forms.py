@@ -6,6 +6,8 @@ from wtforms.validators import DataRequired, EqualTo
 class pokemonform(FlaskForm):
     pokemon = StringField("Input Pokémon", validators = [DataRequired()])
     submit = SubmitField()
+    caught_pokemon = SubmitField()
+
 
 class signupform(FlaskForm):
     username = StringField("Username", validators = [DataRequired()])
@@ -19,8 +21,6 @@ class loginform(FlaskForm):
     password = PasswordField("Password", validators = [DataRequired()])
     submit = SubmitField()
 
-class postform(FlaskForm):
-    title = StringField("Title", validators = [DataRequired()])
-    img_url = StringField("Image URL", validators = [DataRequired()])
-    caption = StringField("Caption", validators = [])
-    submit = SubmitField()
+class PokeCaught(FlaskForm):
+    pokemon = StringField('pokemon', validators=[DataRequired()])
+    caught_pokemon = SubmitField()
