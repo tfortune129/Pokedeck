@@ -186,20 +186,36 @@ def mypokemon():
 @app.route('/release/<int:pokemon_id>', methods=['GET', 'POST'])
 @login_required
 def pokerelease(pokemon_id):
-    pokemon = Pokemon.query.filter_by(user_id=current_user.id, pokemon_id=pokemon_id).first()
-    if pokemon:
-        pokemon.deleteFromDB()
+    pokemon = Pokemon.query.get(pokemon_id)
+    catch = Catch.query.filter(pokemon_id==pokemon_id).first()
+    # catch = Pokemon.query.join(Catch).filter(Catch.user_id==current_user.id, Pokemon.id==pokemon_id).first()
+    if catch:
+        # pokemon = catch.catch
+        # pokemon.deleteFromDB()
+        catch.deleteFromDB()
         flash(f"{pokemon.name.title()} has been removed from your collection.", 'success')
-
     else:
         flash("You don't have that Pokémon in your collection.", 'warning')
-
     return redirect(url_for('mypokemon'))
+
+
+
+
+# def pokerelease(pokemon_id):
+#     pokemon = Pokemon.query.join(Catch).filter(Catch.user_id==current_user.id, Pokemon.id==pokemon_id).first()
+#     if pokemon:
+#         pokemon.deleteFromDB()
+#         flash(f"{pokemon.name.title()} has been removed from your collection.", 'success')
+
+#     else:
+#         flash("You don't have that Pokémon in your collection.", 'warning')
+
+#     return redirect(url_for('mypokemon'))
     
     
     
     
-    pokemon = Pokemon.query.filter_by(id=pokemon_id).filter_by(user_id=current_user.id).first()
+# pokemon = Pokemon.query.filter_by(id=pokemon_id).filter_by(user_id=current_user.id).first()
 
 
 
